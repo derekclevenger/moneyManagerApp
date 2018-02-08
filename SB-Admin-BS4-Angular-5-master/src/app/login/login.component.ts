@@ -9,7 +9,9 @@ import { routerTransition } from '../router.animations';
     animations: [routerTransition()]
 })
 export class LoginComponent implements OnInit {
-    constructor(public router: Router) {}
+    public HomePage: String = 'My Money Manager Application';
+    constructor(public router: Router) {
+    }
 
     ngOnInit() {}
 
