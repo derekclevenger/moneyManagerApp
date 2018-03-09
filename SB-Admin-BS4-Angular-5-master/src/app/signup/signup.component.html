@@ -3,24 +3,28 @@
         <div class="col-md-4">
             <img class="user-avatar" src="assets/images/logo.png" width="150px" />
             <h1 class="jumbotron">My Money Manager Application</h1>
-            <form role="form">
+            <form #registerForm (ngSubmit)="register(registerForm.value)" >
                 <div class="form-content">
                     <div class="form-group">
-                        <input type="text" class="form-control input-underline input-lg" id="" placeholder="Full Name">
+                        <input type="text" class="form-control input-underline input-lg" id="FirstName" name = 'FirstName' placeholder="First Name">
                     </div>
 
                     <div class="form-group">
-                        <input type="text" class="form-control input-underline input-lg" id="" placeholder="Email">
+                        <input type="text" class="form-control input-underline input-lg" id="LastName" name = 'LastName' placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control input-underline input-lg" id="Email" name = 'Email' placeholder="Email">
                     </div>
 
                     <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="Password">
+                        <input type="password" class="form-control input-underline input-lg" id="Password" name = 'Password' placeholder="Password">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="Repeat Password">
+                        <input type="password" class="form-control input-underline input-lg" id="RepeatPassword" name = 'RepeatPassword' placeholder="Repeat Password">
                     </div>
                 </div>
-                <a class="btn rounded-btn" [routerLink]="['/dashboard']"> Register </a>&nbsp;
+                <button type='submit' class = 'btn rounded-btn'>Register</button>
+                <!--<a class="btn rounded-btn" [routerLink]="['/dashboard']">  </a>&nbsp;-->
                 <a class="btn rounded-btn" [routerLink]="['/login']"> Log in </a>
             </form>
         </div>
