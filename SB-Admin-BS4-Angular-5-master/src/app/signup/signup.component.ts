@@ -21,10 +21,9 @@ export class SignupComponent implements OnInit {
     errors: string;
     isRequesting: boolean;
     submitted: boolean = false;
-    private userService: UserService;
 
 
-    constructor( private router: Router) {
+    constructor( private router: Router, private userService: UserService) {
     }
     ngOnInit() {
     }
