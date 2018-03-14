@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
+import { FormsModule } from '@angular/forms';
+
 
 const routes: Routes = [
     { path: 'login', loadChildren: './login/login.module#LoginModule' },
