@@ -4,8 +4,7 @@ import 'rxjs/add/operator/map';
 import { UserService } from '../shared/services/user.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import {NgForm} from '@angular/forms';
-
+import { FormsModule} from '@angular/forms';
 
 import { UserRegistration } from '../shared/models/user.registration.interface';
 
