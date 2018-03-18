@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { NgForm } from '@angular/forms';
 import {EmailValidatorDirective } from '../directives/email.validator.directive';
 import { SignupRoutingModule } from './signup-routing.module';
 import { SignupComponent } from './signup.component';
@@ -12,11 +11,9 @@ import {SharedModule} from '../shared/modules/shared.module';
   imports: [
     CommonModule,
     SignupRoutingModule,
-      FormsModule,
-      ReactiveFormsModule,
       CommonModule,
-      SharedModule
-
+      SharedModule,
+      FormsModule
   ],
   declarations: [SignupComponent, EmailValidatorDirective],
     providers: [UserService]

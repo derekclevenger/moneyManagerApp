@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UserService} from './shared/services/user.service';
 import {BaseAnimationRenderer} from '@angular/platform-browser/animations/src/animation_renderer';
 import {ConfigService} from './shared/utils/config.service';
+import {SignupComponent} from './signup/signup.component';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -29,6 +30,7 @@ export function createTranslateLoader(http: HttpClient) {
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
+        HttpModule,
         BrowserModule,
         FormsModule,
         TranslateModule.forRoot({
