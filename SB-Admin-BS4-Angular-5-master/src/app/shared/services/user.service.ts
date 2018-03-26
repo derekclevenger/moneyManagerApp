@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
-import { UserRegistration } from '../models/user.registration.interface';
+import { UserRegistration } from '../models/user.registration';
+import { User } from '../models/user.model';
 import { ConfigService } from '../utils/config.service';
 
 import {BaseService} from './base.service';
@@ -18,12 +19,10 @@ import '../../rxjs-operators';
 export class UserService extends BaseService {
 
     baseUrl: string = '';
-
     // Observable navItem source
     private _authNavStatusSource = new BehaviorSubject<boolean>(false);
     // Observable navItem stream
     authNavStatus$ = this._authNavStatusSource.asObservable();
-
     private loggedIn = false;
 
     constructor(private http: Http, private configService: ConfigService) {
@@ -56,13 +55,28 @@ export class UserService extends BaseService {
             )
             .map(res => res.json())
             .map(res => {
-                localStorage.setItem('auth_token', res.auth_token);
+                localStorage.setItem('auth_token', res.token);
                 this.loggedIn = true;
                 this._authNavStatusSource.next(true);
                 return true;
             })
             .catch(this.handleError);
     }
+
+    getUser(email, password): Observable<User[]> {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this.http.post(this.baseUrl + '/applicationuser/1',
+            JSON.stringify({ email: email, password }), { headers }
+            )
+            .map(response => response.json())
+            .map(response => {
+                return  <User[]>response;
+            })
+            .catch(this.handleError);
+    }
+
 
     logout() {
         localStorage.removeItem('auth_token');

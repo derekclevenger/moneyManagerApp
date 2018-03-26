@@ -5,7 +5,7 @@ import { UserService } from '../shared/services/user.service';
 import { Router } from '@angular/router';
 import {CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserRegistration } from '../shared/models/user.registration.interface';
+import { UserRegistration } from '../shared/models/user.registration';
 
 
 @Component({

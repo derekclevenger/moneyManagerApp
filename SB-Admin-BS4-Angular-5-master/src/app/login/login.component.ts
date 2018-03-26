@@ -5,8 +5,8 @@ import { routerTransition } from '../router.animations';
 import { Subscription } from 'rxjs/Subscription';
 import { Credentials } from '../shared/models/credentials.interface';
 import { UserService } from '../shared/services/user.service';
-import { UserRegistration } from '../shared/models/user.registration.interface';
-
+import { User } from '../shared/models/user.model';
+import { HeaderComponent } from '../layout/components/header/header.component';
 
 @Component({
     selector: 'app-login',
@@ -16,7 +16,6 @@ import { UserRegistration } from '../shared/models/user.registration.interface';
 })
 export class LoginComponent implements OnInit, OnDestroy {
     public HomePage: String = 'My Money Manager Application';
-
     private subscription: Subscription;
 
     brandNew: boolean;
@@ -24,8 +23,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     isRequesting: boolean;
     submitted: boolean = false;
     credentials: Credentials = { email: '', password: '' };
-    user: UserRegistration = { firstName: '', lastName: '' , email: '', password: ''};
-
+    _user: User[];
+    headerComponent: HeaderComponent;
     constructor(private userService: UserService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
@@ -45,17 +44,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         localStorage.setItem('isLoggedin', 'true');
     }
 
-    loggedIn(returnedUser: any) {
-        this.user.firstName = returnedUser['firstName'];
-        this.user.lastName = returnedUser['lastName'];
-        this.user.email = returnedUser['email'];
-    }
 
     login({ value, valid }: { value: Credentials, valid: boolean }) {
         this.submitted = true;
         this.isRequesting = true;
         this.errors = '';
         if (valid) {
+            this.getLoginUser(value);
             this.userService.login(value.email, value.password)
                 .finally(() => this.isRequesting = false)
                 .subscribe(
@@ -65,7 +60,20 @@ export class LoginComponent implements OnInit, OnDestroy {
                             this.router.navigate(['/dashboard']);
                         }
                     },
-                    error => this.errors = error);
+                    error => this.errors = error.toString());
         }
+    }
+
+    getLoginUser(value: Credentials): void {
+        this.userService.getUser(value.email, value.password)
+            .subscribe(
+                result => {
+                    localStorage.setItem('id', result['id']);
+                    localStorage.setItem('firstName', result['firstName']);
+                    localStorage.setItem('lastName', result['lastName']);
+                    localStorage.setItem('email', result['email']);
+                } ,
+                error => console.log('Error :: ' + error)
+            );
     }
 }

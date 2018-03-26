@@ -15,7 +15,7 @@
                     class="nav-link btn mt-1" role="button"
                     style="padding: .375rem 1rem !important;border-color: #999;"
                 >
-                    {{ 'Download Now' | translate }}
+                    {{ ' Now' | translate }}
                 </a>
             </li> &nbsp;
             <li class="nav-item">
@@ -36,9 +36,6 @@
                             src="http://i.huffpost.com/gadgets/slideshows/461162/slide_461162_6224974_sq50.jpg" alt="Generic placeholder image"
                         >
                         <div class="media-body">
-                            <h5 class="mt-0 mb-1"></h5>
-                            <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                            <p class="last"> Lorem ipsum dolor sit amet, consectetur...</p>
                         </div>
                     </li>
                     <li class="media">
@@ -47,9 +44,6 @@
                             alt="Generic placeholder image"
                         >
                         <div class="media-body">
-                            <h5 class="mt-0 mb-1">John Smith</h5>
-                            <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                            <p class="last"> Lorem ipsum dolor sit amet, consectetur...</p>
                         </div>
                     </li>
                     <li class="media">
@@ -58,9 +52,6 @@
                             alt="Generic placeholder image"
                         />
                         <div class="media-body">
-                            <h5 class="mt-0 mb-1">John Smith</h5>
-                            <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                            <p class="last"> Lorem ipsum dolor sit amet, consectetur...</p>
                         </div>
                     </li>
                 </ul>
@@ -115,7 +106,7 @@
             </li>
             <li class="nav-item dropdown" ngbDropdown>
                 <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
-                    <i class="fa fa-user"></i> John Smith <b class="caret"></b>
+                    <i class="fa fa-user"></i> {{ user!.getFirstName() + ' ' + user!.getLastName() }}<b class="caret"></b>
                 </a>
                 <div class="dropdown-menu-right" ngbDropdownMenu>
                     <a class="dropdown-item" href="javascript:void(0)">

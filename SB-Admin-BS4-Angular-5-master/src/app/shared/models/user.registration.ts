@@ -1,6 +1,6 @@
-export class UserRegistration {
+export interface UserRegistration {
     email: string;
-    password: string;
     firstName: string;
     lastName:  string;
+    password: string;
 }
