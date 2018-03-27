@@ -7,7 +7,7 @@
             <form #f="ngForm" novalidate  (ngSubmit)="registerUser(f)">
                 <div class="form-content">
                     <div class="form-group">
-                        <input type="text" class="form-control input-underline input-lg" id="firstName" minlength="3" placeholder="First name" name="firstName" ngModel required >
+                        <input type="text" class="form-control input-underline input-lg" id="firstName" minlength="3" placeholder="First name" name="firstName" ngModel required validator="name" >
                     </div>
 
                     <div class="form-group">
@@ -29,7 +29,6 @@
                     <a class="btn rounded-btn" [routerLink]="['/login']"> Log in </a>
                     <div *ngIf="errors" class="alert alert-danger" role="alert">
                     <app-spinner [isRunning]="isRequesting"></app-spinner>
-
                     <strong>Oops!</strong> {{errors}}
                 </div>
             </form>

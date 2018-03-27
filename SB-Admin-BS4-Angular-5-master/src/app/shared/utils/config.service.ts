@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {API_URL} from '../../constants';
 
 @Injectable()
 export class ConfigService {
@@ -6,7 +7,7 @@ export class ConfigService {
     _apiURI: string;
 
     constructor() {
-        this._apiURI = 'http://localhost:5000/api';
+        this._apiURI = API_URL;
     }
 
     getApiURI() {
