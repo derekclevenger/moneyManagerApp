@@ -4,6 +4,9 @@ import { NgbCarouselModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
+// TODO try adding in the component to this and import it.
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+
 import {
     TimelineComponent,
     NotificationComponent,
@@ -17,7 +20,8 @@ import { StatModule } from '../../shared';
         NgbCarouselModule.forRoot(),
         NgbAlertModule.forRoot(),
         DashboardRoutingModule,
-        StatModule
+        StatModule,
+        Ng2SmartTableModule
     ],
     declarations: [
         DashboardComponent,
