@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
+import { DashBoardServices } from '../../shared/services/dashboard.service';
 import { ServerDataSource } from 'ng2-smart-table';
 
 @Component({
@@ -11,7 +12,7 @@ import { ServerDataSource } from 'ng2-smart-table';
 export class DashboardComponent implements OnInit {
     public alerts: Array<any> = [];
     public sliders: Array<any> = [];
-
+    source: ServerDataSource;
     settings = {
         columns: {
             payee: {
@@ -31,10 +32,20 @@ export class DashboardComponent implements OnInit {
 
 
 
-    constructor() {
+    constructor( private dashBoardServices: DashBoardServices) {
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.dashBoardServices.getTransactions()
+            .subscribe(
+                result => {
+                    if (result) {
+                        console.log(result['id']);
+                        // Map everything back to where it can be loaded into the table.
+                    }
+                },
+                error => error.toString());
+    }
 
     public closeAlert(alert: any) {
         const index: number = this.alerts.indexOf(alert);
