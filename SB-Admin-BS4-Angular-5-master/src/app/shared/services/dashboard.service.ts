@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs/Rx';
 
 // Add the RxJS Observable operators we need in this app.
 import '../../rxjs-operators';
+import {User} from '../models/user.model';
 
 
 @Injectable()
@@ -39,7 +40,10 @@ export class DashBoardServices extends BaseService {
         let options = new RequestOptions({ headers: headers });
 
         return this.http.get(this.baseUrl + '/transactions/' + localStorage.getItem('id'), options)
-            .map(res => true)
+            .map(response => response.json())
+            .map(response => {
+                return  <Transactions[]>response;
+            })
             .catch(this.handleError);
     }
 
