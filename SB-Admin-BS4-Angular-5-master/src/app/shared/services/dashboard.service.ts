@@ -32,14 +32,30 @@ export class DashBoardServices extends BaseService {
         this.baseUrl = configService.getApiURI();
     }
 
-    // FIX for the right url then update it so that it is called by the dashboard
-
+    // Need to fix this to do CRUD
     getTransactions(): Observable<Transactions[]> {
         // let body = JSON.stringify({ id });
-        let headers = new Headers({ 'Content-Type': 'application/json' , 'Authorization' : 'bearer ' + localStorage.getItem('auth_token')});
-        let options = new RequestOptions({ headers: headers });
+        let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'bearer ' + localStorage.getItem('auth_token')});
+        let options = new RequestOptions({headers: headers});
 
         return this.http.get(this.baseUrl + '/transactions/' + localStorage.getItem('id'), options)
+            .map(response => response.json())
+            .map(response => {
+                return <Transactions[]>response;
+            })
+            .catch(this.handleError);
+    }
+
+    addTransaction(payee: string, transactionDate: Date, amount: number,
+                   category: string, accountType: string, userId: string): Observable<Transactions[]> {
+        let body = JSON.stringify({payee, transactionDate, amount, category, accountType, userId});
+        let headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + localStorage.getItem('auth_token'),
+        });
+        let options = new RequestOptions({headers: headers});
+
+        return this.http.post(this.baseUrl + '/transactions', body, options)
             .map(response => response.json())
             .map(response => {
                 return  <Transactions[]>response;
@@ -47,7 +63,30 @@ export class DashBoardServices extends BaseService {
             .catch(this.handleError);
     }
 
+    deleteTransaction(id: number): Observable<Transactions> {
+        const headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + localStorage.getItem('auth_token'),
+        });
+        const options = new RequestOptions({headers: headers});
 
+        return this.http.delete(this.baseUrl + '/transactions/' + id, options)
+            .map(res => true)
+            .catch(this.handleError);
+    }
 
+    updateTransaction(id: number, payee: string, transactionDate: Date, amount: number,
+                      category: string, accountType: string, userId: string): Observable<Transactions> {
+        let body = JSON.stringify({id, payee, transactionDate, amount, category, accountType, userId});
+        let headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + localStorage.getItem('auth_token'),
+        });
+        let options = new RequestOptions({headers: headers});
+
+        return this.http.put(this.baseUrl + '/transactions/' + id, body, options)
+            .map(res => true)
+            .catch(this.handleError);
+    }
 }
 

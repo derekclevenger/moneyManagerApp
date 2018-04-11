@@ -1,6 +1,9 @@
 export interface Transactions {
     payerPayee: string;
-    transactionDate: Date;
+    transactionDate: any;
     amount: number;
     category:  string;
+    accountType: string;
+    userId: number;
+    id: number;
 }
