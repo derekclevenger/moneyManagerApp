@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
                       type: 'list',
                   config: {
                         list: [{value: 'Credit', title: 'Credit'}, {value: 'Debit', title: 'Debit'}, {
-                            value: '<b>Checking</b>',
+                            value: 'Checking',
                             title: 'Checking',
                         }],
                     }
