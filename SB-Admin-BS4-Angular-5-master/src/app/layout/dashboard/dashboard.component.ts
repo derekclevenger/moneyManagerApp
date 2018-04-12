@@ -5,7 +5,8 @@ import { ServerDataSource } from 'ng2-smart-table';
 import {Transactions} from '../../shared/models/transactions.interface';
 import 'rxjs/add/operator/map';
 import { Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import {CurrencyPipe, DatePipe} from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 
 
 @Component({
@@ -75,7 +76,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-    constructor( private dashBoardServices: DashBoardServices, private datePipe: DatePipe) {
+    constructor( private dashBoardServices: DashBoardServices, private datePipe: DatePipe, private currencyPipe: CurrencyPipe) {
     }
 
     ngOnInit() {
@@ -84,10 +85,11 @@ export class DashboardComponent implements OnInit {
                 result => {
                     if (result) {
                         for (let i = 0; i < result.length; i++) {
-                          result[i].transactionDate = this.datePipe.transform(new Date(result[i].transactionDate), 'dd-MM-yy');
+                          result[i].transactionDate = this.datePipe.transform(new Date(result[i].transactionDate), 'dd-MM-yyyy');
+                            result[i].amount = this.currencyPipe.transform(result[i].amount, 'USD');
+
                         }
                         this.transactions = result;
-                        //currently broke here
                         }
                 },
                 error => error.toString());
@@ -127,6 +129,7 @@ export class DashboardComponent implements OnInit {
                 .subscribe(
                     result  => {if (result) {
                         event.newData['id'] = result['id'];
+                        event.newData['amount'] = this.currencyPipe.transform(event.newData['amount'], 'USD');
                         event.confirm.resolve(event.newData);
                     }},
                     errors =>  this.errors = errors);
