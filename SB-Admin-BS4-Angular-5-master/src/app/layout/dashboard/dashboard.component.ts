@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit {
                 result => {
                     if (result) {
                         for (let i = 0; i < result.length; i++) {
-                          result[i].transactionDate = this.datePipe.transform(new Date(result[i].transactionDate), 'dd-MM-yyyy');
+                          result[i].transactionDate = this.datePipe.transform(new Date(result[i].transactionDate), 'MM-dd-yyyy');
                             result[i].amount = this.currencyPipe.transform(result[i].amount, 'USD');
 
                         }
@@ -110,10 +110,13 @@ export class DashboardComponent implements OnInit {
 
     onSaveConfirm(event) {
         if (window.confirm('Are you sure you want to save?')) {
+            event.newData['amount'] = event.newData['amount'].replace('$', '');
+            event.newData['amount'] = parseFloat(event.newData['amount']);
             this.dashBoardServices.updateTransaction(event.data['id'], event.newData['payee'], event.newData['transactionDate'],
                 event.newData['amount'], event.newData['category'], event.newData['accountType'], localStorage.getItem('id'))
                 .subscribe(
                     result  => {if (result) {
+                        event.newData['amount'] = this.currencyPipe.transform(event.newData['amount'], 'USD');
                         event.confirm.resolve(event.newData);
                     }},
                     errors =>  this.errors = errors);
@@ -129,6 +132,7 @@ export class DashboardComponent implements OnInit {
                 .subscribe(
                     result  => {if (result) {
                         event.newData['id'] = result['id'];
+                        event.newData['transactionDate']= this.datePipe.transform(new Date(event.newData['transactionDate']), 'MM-dd-yyyy');
                         event.newData['amount'] = this.currencyPipe.transform(event.newData['amount'], 'USD');
                         event.confirm.resolve(event.newData);
                     }},
