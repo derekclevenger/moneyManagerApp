@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, CurrencyPipe, DatePipe} from '@angular/common';
 import { NgbCarouselModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -13,6 +13,8 @@ import {
     ChatComponent
 } from './components';
 import { StatModule } from '../../shared';
+import {UserService} from '../../shared/services/user.service';
+import {DashBoardServices} from '../../shared/services/dashboard.service';
 
 @NgModule({
     imports: [
@@ -28,6 +30,7 @@ import { StatModule } from '../../shared';
         TimelineComponent,
         NotificationComponent,
         ChatComponent
-    ]
+    ],
+    providers: [ DashBoardServices, DatePipe, CurrencyPipe ]
 })
 export class DashboardModule {}
