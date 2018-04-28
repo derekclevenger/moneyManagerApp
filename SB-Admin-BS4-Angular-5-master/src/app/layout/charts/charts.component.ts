@@ -8,6 +8,7 @@ import { Budget } from '../../shared/models/budget.interface';
 import {UserRegistration} from '../../shared/models/user.registration';
 import {NgModel} from '@angular/forms';
 import {Router} from '@angular/router';
+import {CurrencyPipe} from '@angular/common';
 
 @Component({
     selector: 'app-charts',
@@ -24,7 +25,6 @@ export class ChartsComponent implements OnInit {
     public budget: Budget[];
     badCat = false;
     badBudget = false;
-
     // settings = {
     //     delete: {
     //         confirmDelete: true,

@@ -69,8 +69,8 @@
                 <tr  *ngFor="let budgets of budget">
                     <td hidden="true">{{budgets.id}}</td>
                     <td>{{budgets.category}}</td>
-                    <td *ngIf="budgets.monthly">{{budgets.amount}}</td>
-                    <td *ngIf="!budgets.monthly">{{budgets.amount / 12}}</td>
+                    <td *ngIf="budgets.monthly">{{budgets.amount | currency: 'USD'}}</td>
+                    <td *ngIf="!budgets.monthly">{{budgets.amount / 12 | currency: 'USD'}}</td>
                     <td><a href="javascript:void(0)"  ngbDropdownToggle>Edit <i class="fa fa-pencil-square"></i> </a></td>
                     <td><a href="javascript:void(0)"  (click)="deleteBudget(budgets.id)">Delete <i class="fa fa-trash-o"></i></a></td>
                 </tr>
