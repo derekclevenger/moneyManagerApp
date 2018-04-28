@@ -9,6 +9,7 @@ import {UserRegistration} from '../../shared/models/user.registration';
 import {NgModel} from '@angular/forms';
 import {Router} from '@angular/router';
 import {CurrencyPipe} from '@angular/common';
+import { ModalComponent } from '../bs-component/components';
 
 @Component({
     selector: 'app-charts',
@@ -25,51 +26,8 @@ export class ChartsComponent implements OnInit {
     public budget: Budget[];
     badCat = false;
     badBudget = false;
-    // settings = {
-    //     delete: {
-    //         confirmDelete: true,
-    //     },
-    //     add: {
-    //         confirmCreate: true,
-    //         id: false
-    //     },
-    //     edit: {
-    //         confirmSave: true,
-    //     },
-    //     columns: {
-    //         id: {
-    //             addable: false,
-    //             filter: false,
-    //             editable: false,
-    //             title: 'Id'
-    //         },
-    //         amount: {
-    //             title: 'Amount'
-    //         },
-    //         category: {
-    //             title: 'Category',
-    //             type: 'html',
-    //             editor: {
-    //                 type: 'list',
-    //                 config: {
-    //                     list: [{value: 'true', title: 'Monthly'}, {value: 'false', title: 'Yearly'}],
-    //                 }
-    //             }
-    //         },
-    //         monthly: {
-    //             title: 'Monthly/Yearly',
-    //             type: 'html',
-    //             editor: {
-    //                 type: 'list',
-    //                 config: {
-    //                     list: [{value: 'true', title: 'Monthly'}, {value: 'false', title: 'Yearly'}],
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-
+    editBudget = false;
+    public budgetToEdit: Budget[];
 
     constructor(private budgetService: BudgetService) {}
 
@@ -84,7 +42,31 @@ export class ChartsComponent implements OnInit {
          }
     }
 
+    public updateBudget(id: number) {
+        this.budgetService.getSingleBudget(id)
+            .finally(() => this.isRequesting = false)
+            .subscribe(
+                result  => {if (result) {
+                    this.budgetToEdit = result;
+                    this.editBudget = true;
+                }},
+                errors =>  this.errors = errors);
+    }
 
+    public updateFullBudget({ value }: { value: Budget}) {
+        this.budgetService.updateBudget(this.budgetToEdit[0].id, value.amount, value.category, value.monthly, localStorage.getItem('id'))
+            .finally(() => this.isRequesting = false)
+            .subscribe(
+                result  => {if (result) {
+                    this.getBudget();
+                    this.editBudget = false;
+                }},
+                errors =>  this.errors = errors);
+    }
+
+    public cancel() {
+        this.editBudget = false;
+    }
     //
     // onSaveConfirm(event) {
     //     if (window.confirm('Are you sure you want to save?')) {

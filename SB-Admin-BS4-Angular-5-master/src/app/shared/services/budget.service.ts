@@ -75,6 +75,19 @@ export class BudgetService extends BaseService {
             .catch(this.handleError);
     }
 
+    getSingleBudget(id: number): Observable<Budget[]> {
+        // let body = JSON.stringify({ id });
+        let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'bearer ' + localStorage.getItem('auth_token')});
+        let options = new RequestOptions({headers: headers});
+
+        return this.http.get(this.baseUrl + '/budget/getbyid/' + id, options)
+            .map(response => response.json())
+            .map(response => {
+                return <Budget[]>response;
+            })
+            .catch(this.handleError);
+    }
+
     addBudget(amount: number, category: string, monthly: boolean, userId: string): Observable<Budget[]> {
         let body = JSON.stringify({amount, category, monthly, userId});
         let headers = new Headers({
@@ -111,7 +124,7 @@ export class BudgetService extends BaseService {
         });
         let options = new RequestOptions({headers: headers});
 
-        return this.http.put(this.baseUrl + '/budget/updatebudget/' + id, body, options)
+        return this.http.put(this.baseUrl + '/Budget/UpdateBudget/' + id, body, options)
             .map(res => true)
             .catch(this.handleError);
     }

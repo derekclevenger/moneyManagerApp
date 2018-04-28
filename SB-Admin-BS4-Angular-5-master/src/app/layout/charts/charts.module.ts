@@ -16,7 +16,7 @@ import {FormsModule} from '@angular/forms';
         ChartsRoutingModule,
         PageHeaderModule,
         Ng2SmartTableModule,
-        FormsModule
+        FormsModule,
     ],
     declarations: [ChartsComponent],
     providers: [ BudgetService, CurrencyPipe ]
