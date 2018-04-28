@@ -46,12 +46,28 @@ export class BudgetService extends BaseService {
             .catch(this.handleError);
     }
 
+    addCategory(category: string): Observable<Category[]> {
+        let body = JSON.stringify({category});
+        let headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + localStorage.getItem('auth_token'),
+        });
+        let options = new RequestOptions({headers: headers});
+
+        return this.http.post(this.baseUrl + '/category', body, options)
+            .map(response => response.json())
+            .map(response => {
+                return  <Category[]>response;
+            })
+            .catch(this.handleError);
+    }
+
     getBudgets(): Observable<Budget[]> {
         // let body = JSON.stringify({ id });
         let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'bearer ' + localStorage.getItem('auth_token')});
         let options = new RequestOptions({headers: headers});
 
-        return this.http.get(this.baseUrl + '/budget/' + localStorage.getItem('id'), options)
+        return this.http.get(this.baseUrl + '/budget/getbyuser/' + localStorage.getItem('id'), options)
             .map(response => response.json())
             .map(response => {
                 return <Budget[]>response;
@@ -67,7 +83,7 @@ export class BudgetService extends BaseService {
         });
         let options = new RequestOptions({headers: headers});
 
-        return this.http.post(this.baseUrl + '/budget', body, options)
+        return this.http.post(this.baseUrl + '/budget/addbudget', body, options)
             .map(response => response.json())
             .map(response => {
                 return  <Budget[]>response;
@@ -82,7 +98,7 @@ export class BudgetService extends BaseService {
         });
         const options = new RequestOptions({headers: headers});
 
-        return this.http.delete(this.baseUrl + '/budget/' + id, options)
+        return this.http.delete(this.baseUrl + '/budget/deletebudget/' + id, options)
             .map(res => true)
             .catch(this.handleError);
     }
@@ -95,7 +111,7 @@ export class BudgetService extends BaseService {
         });
         let options = new RequestOptions({headers: headers});
 
-        return this.http.put(this.baseUrl + '/budget/' + id, body, options)
+        return this.http.put(this.baseUrl + '/budget/updatebudget/' + id, body, options)
             .map(res => true)
             .catch(this.handleError);
     }

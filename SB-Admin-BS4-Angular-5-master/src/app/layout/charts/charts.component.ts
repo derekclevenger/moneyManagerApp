@@ -5,6 +5,9 @@ import { ServerDataSource } from 'ng2-smart-table';
 import { BudgetService } from '../../shared/services/budget.service';
 import {Category} from '../../shared/models/category.interface';
 import { Budget } from '../../shared/models/budget.interface';
+import {UserRegistration} from '../../shared/models/user.registration';
+import {NgModel} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-charts',
@@ -17,7 +20,10 @@ export class ChartsComponent implements OnInit {
     source: ServerDataSource;
     errors: string;
     dateNow: Date = new Date();
+    isRequesting = false;
     public budget: Budget[];
+    badCat = false;
+    badBudget = false;
 
     // settings = {
     //     delete: {
@@ -67,18 +73,18 @@ export class ChartsComponent implements OnInit {
 
     constructor(private budgetService: BudgetService) {}
 
-    // onDeleteConfirm(event) {
-    //     if (window.confirm('Are you sure you want to delete?')) {
-    //         this.dashBoardServices.deleteTransaction(event.data['id'])
-    //             .subscribe(
-    //                 result  => {if (result) {
-    //                     event.confirm.resolve();
-    //                 }},
-    //                 errors =>  this.errors = errors);
-    //     } else {
-    //         event.confirm.reject();
-    //     }
-    // }
+    public deleteBudget(id: number) {
+        if (window.confirm('Are you sure you want to delete?')) {
+            this.budgetService.deleteBudget(id)
+                .subscribe(
+                    result  => {if (result) {
+                        this.getBudget();
+                    }},
+                    errors =>  this.errors = errors);
+         }
+    }
+
+
     //
     // onSaveConfirm(event) {
     //     if (window.confirm('Are you sure you want to save?')) {
@@ -114,7 +120,46 @@ export class ChartsComponent implements OnInit {
     //     }
     // }
 
-    public getCategories() {
+    public addBudgets({ value }: { value: Budget}) {
+        this.isRequesting = true;
+        this.errors = '';
+        for (let i = 0; i < this.budget.length; i++) {
+            if (value.category.toLocaleLowerCase() === this.budget[i].category.toLocaleLowerCase()) {
+                this.badBudget = true;
+                return false;
+            }
+        }
+            this.budgetService.addBudget(value.amount, value.category, value.monthly, localStorage.getItem('id'))
+                .finally(() => this.isRequesting = false)
+                .subscribe(
+                    result  => {if (result) {
+                         this.getBudget();
+                         this.badBudget = false;
+                    }},
+                    errors =>  this.errors = errors);
+    }
+
+    // TODO add modal to add category and EDIT everything
+    public addCategory({ value }: { value: Category}) {
+        this.isRequesting = true;
+        this.errors = '';
+        for (let i = 0; i < this.categories.length; i++) {
+            if (value.category.toLocaleLowerCase() === this.categories[i].category.toLocaleLowerCase()) {
+                this.badCat = true;
+                return false;
+            }
+        }
+        this.budgetService.addCategory(value.category)
+            .finally(() => this.isRequesting = false)
+            .subscribe(
+                result  => {if (result) {
+                    this.badCat = false;
+                    this.getCategory();
+                }},
+                errors =>  this.errors = errors);
+    }
+
+    public getCategory() {
         this.budgetService.getCategories()
             .subscribe(
                 result => {
@@ -125,8 +170,21 @@ export class ChartsComponent implements OnInit {
                 error => error.toString());
     }
 
+    public getBudget() {
+        this.budgetService.getBudgets()
+            .subscribe(
+                result => {
+                    if (result) {
+                        this.budget = result;
+                        console.log(this.budget);
+                    }
+                },
+                error => error.toString());
+    }
+
     ngOnInit() {
-        this.getCategories();
+        this.getCategory();
+        this.getBudget();
     }
 
     // // bar chart

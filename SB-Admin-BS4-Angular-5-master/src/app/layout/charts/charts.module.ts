@@ -7,6 +7,7 @@ import { ChartsComponent } from './charts.component';
 import { PageHeaderModule } from '../../shared';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import {BudgetService} from '../../shared/services/budget.service';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import {BudgetService} from '../../shared/services/budget.service';
         Ng2Charts,
         ChartsRoutingModule,
         PageHeaderModule,
-        Ng2SmartTableModule
+        Ng2SmartTableModule,
+        FormsModule
     ],
     declarations: [ChartsComponent],
     providers: [ BudgetService, CurrencyPipe ]
