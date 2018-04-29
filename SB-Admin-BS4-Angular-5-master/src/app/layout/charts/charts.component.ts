@@ -5,11 +5,8 @@ import { ServerDataSource } from 'ng2-smart-table';
 import { BudgetService } from '../../shared/services/budget.service';
 import {Category} from '../../shared/models/category.interface';
 import { Budget } from '../../shared/models/budget.interface';
-import {UserRegistration} from '../../shared/models/user.registration';
-import {NgModel} from '@angular/forms';
-import {Router} from '@angular/router';
-import {CurrencyPipe} from '@angular/common';
-import { ModalComponent } from '../bs-component/components';
+
+
 
 @Component({
     selector: 'app-charts',
@@ -28,6 +25,8 @@ export class ChartsComponent implements OnInit {
     badBudget = false;
     editBudget = false;
     public budgetToEdit: Budget[];
+    public newBudgets = false;
+    public newCats = false;
 
     constructor(private budgetService: BudgetService) {}
 
@@ -64,43 +63,19 @@ export class ChartsComponent implements OnInit {
                 errors =>  this.errors = errors);
     }
 
-    public cancel() {
-        this.editBudget = false;
+    public newCat() {
+        this.newCats = true;
     }
-    //
-    // onSaveConfirm(event) {
-    //     if (window.confirm('Are you sure you want to save?')) {
-    //         event.newData['amount'] = event.newData['amount'].replace('$', '');
-    //         event.newData['amount'] = parseFloat(event.newData['amount']);
-    //         this.dashBoardServices.updateTransaction(event.data['id'], event.newData['payee'], event.newData['transactionDate'],
-    //             event.newData['amount'], event.newData['category'], event.newData['accountType'], localStorage.getItem('id'))
-    //             .subscribe(
-    //                 result  => {if (result) {
-    //                     event.newData['amount'] = this.currencyPipe.transform(event.newData['amount'], 'USD');
-    //                     event.confirm.resolve(event.newData);
-    //                 }},
-    //                 errors =>  this.errors = errors);
-    //     } else {
-    //         event.confirm.reject();
-    //     }
-    // }
-    //
-    // onCreateConfirm(event) {
-    //     if (window.confirm('Are you sure you want to create?')) {
-    //         this.dashBoardServices.addTransaction(event.newData['payee'], event.newData['transactionDate'], event.newData['amount'],
-    //             event.newData['category'], event.newData['accountType'], localStorage.getItem('id'))
-    //             .subscribe(
-    //                 result  => {if (result) {
-    //                     event.newData['id'] = result['id'];
-    //                     event.newData['transactionDate']= this.datePipe.transform(new Date(event.newData['transactionDate']), 'MM-dd-yyyy');
-    //                     event.newData['amount'] = this.currencyPipe.transform(event.newData['amount'], 'USD');
-    //                     event.confirm.resolve(event.newData);
-    //                 }},
-    //                 errors =>  this.errors = errors);
-    //     } else {
-    //         event.confirm.reject();
-    //     }
-    // }
+
+    public  newBudget() {
+        this.newBudgets = true;
+    }
+
+    public cancel() {
+            this.editBudget = false;
+            this.newBudgets = false;
+            this.newCats = false;
+    }
 
     public addBudgets({ value }: { value: Budget}) {
         this.isRequesting = true;
@@ -117,6 +92,7 @@ export class ChartsComponent implements OnInit {
                     result  => {if (result) {
                          this.getBudget();
                          this.badBudget = false;
+                         this.newBudgets = false;
                     }},
                     errors =>  this.errors = errors);
     }
@@ -136,6 +112,7 @@ export class ChartsComponent implements OnInit {
             .subscribe(
                 result  => {if (result) {
                     this.badCat = false;
+                    this.newCats = false;
                     this.getCategory();
                 }},
                 errors =>  this.errors = errors);

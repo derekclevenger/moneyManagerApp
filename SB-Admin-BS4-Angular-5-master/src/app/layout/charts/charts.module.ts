@@ -8,6 +8,10 @@ import { PageHeaderModule } from '../../shared';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import {BudgetService} from '../../shared/services/budget.service';
 import {FormsModule} from '@angular/forms';
+import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule,
+    MatSortModule, MatTableModule } from '@angular/material';
+
+
 
 @NgModule({
     imports: [

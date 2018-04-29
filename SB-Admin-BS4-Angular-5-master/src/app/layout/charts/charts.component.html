@@ -1,86 +1,154 @@
 <div [@routerTransition]>
 
     <app-page-header [heading]="'Budgets'" [icon]="'fa-bar-chart-o'"></app-page-header>
-    <div class="col col-sm-12">
-        <form #f="ngForm" novalidate (submit)="addBudgets(f); f.reset()" >
-    <div class="row">
-        <div class="form-group col-sm-3">
+    <div>
+        <form *ngIf="newBudgets" #f="ngForm" novalidate (submit)="addBudgets(f); f.reset()" >
+        <div>
             <label>Category</label>
-            <select class="form-control"  id="category" name="category" required ngModel>
+            <select class="form-control"   name="category" required ngModel>
                 <option *ngFor="let category of categories" value={{category.category}} >{{category.category}}</option>
             </select>
         </div>
-        <div class="col-sm-3">
+            <div class="error" *ngIf="badBudget" style="margin-left: 15px;" >Category already in use! <br></div>
+
+            <div>
             <label>Amount</label>
-            <input class="form-control input-underline input-lg" type="number" placeholder="Enter Amount" id="amount" minlength="1"  name="amount" ngModel required >
+            <input class="form-control input-underline input-lg" type="number" placeholder="Enter Amount"  minlength="1"  name="amount" ngModel required >
         </div>
-        <div class="form-group col-sm-3">
+            <div><br>
             <label>Monthly/Yearly</label>
-            <select class="form-control"  id="monthly" name="monthly"  ngModel required>
+            <select class="form-control"   name="monthly"  ngModel required>
                 <option value="True" >Monthly</option>
                 <option value="False" >Yearly</option>
             </select>
-        </div>
-
-        <div class="form-group col-sm-3">
-            <button class="btn-group-sm" style="margin-top: 35px;" type="submit" [disabled]="!f.form.valid">Add Budget</button>
-        </div>
-    </div>
-
+            </div>
+            <button class="btn-group-sm" style="margin-top: 15px;" type="submit" [disabled]="!f.form.valid">Add Budget</button>
+            <button class="btn-group-sm " style="margin-top: 5px;" type="button" (click)="cancel()" >Cancel <i class="fa fa-remove"></i></button>
         </form>
     </div>
-    <div class="error" *ngIf="badBudget" style="margin-left: 15px;" >Category already being used for budget!</div>
 
+    <div>
+        <form *ngIf="newCats" #cat="ngForm" novalidate (submit)="addCategory(cat); cat.reset()" >
+            <div>
 
-    <div class="col col-sm-12">
-        <form #cat="ngForm" novalidate (submit)="addCategory(cat); cat.reset()" >
-            <div class="row">
-                 <div class="col-sm-3">
-                     <label>Add New Category</label>
-                <input class="form-control input-underline input-lg" type="text" placeholder="Enter New Category"  minlength="3"  name="category" ngModel required >
-                 </div>
-                <div class="form-group col-sm-3">
-                    <button class="btn-group-lg" style="margin-top: 35px;" type="submit" [disabled]="!cat.form.valid">Add Category</button>
-                </div>
+                    <label>Add New Category</label>
+                    <input class="form-control input-underline input-lg" type="text" placeholder="Enter New Category"  minlength="3"  name="category" ngModel required >
+                <div class="error" *ngIf="badCat" style="margin-left: 15px;" >Please enter a NEW category!</div>
+
+                <button class="btn-group-lg" style="margin-top: 15px;" type="submit" [disabled]="!cat.form.valid">Add Category</button>
+                <button class="btn-group-sm " style="margin-top: 5px;" type="button" (click)="cancel()" >Cancel <i class="fa fa-remove"></i></button>
+
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <form #update="ngForm"  *ngIf="editBudget" novalidate (submit)="updateFullBudget(update); update.reset()" >
+            <div>
+                <input class="form-control input-underline input-lg" type="text" placeholder={{budgetToEdit[0].id}} value={{budgetToEdit[0].id}} hidden name="id" ngModel required >
+            </div>
+            <div>
+                <label>Category to Edit</label>
+                <input class="form-control input-underline input-lg" type="text" placeholder={{budgetToEdit[0].category}} value={{budgetToEdit[0].category}} disabled name="category" ngModel  >
+            </div>
+            <div>
+                <label>Edit Amount</label>
+                <input class="form-control input-underline input-lg" type="number" placeholder={{budgetToEdit[0].amount}} minlength="1"  name="amount" ngModel required >
+            </div>
+            <div><br>
+                <label>Monthly/Yearly</label>
+                <select class="form-control"   name="monthly"  ngModel required>
+                    <option value="True" >Monthly</option>
+                    <option value="False" >Yearly</option>
+                </select>
             </div>
 
+            <button class="btn-group-sm " style="margin-top: 10px;"  type="submit" >Update Budget</button>
+            <button class="btn-group-sm " style="margin-top: 5px;" type="button" (click)="cancel()" >Cancel <i class="fa fa-remove"></i></button>
         </form>
     </div>
-    <div class="error" *ngIf="badCat" style="margin-left: 15px;" >Please enter a NEW category!</div>
 
-    <div class="col col-sm-12">
-        <form #update="ngForm" *ngIf="editBudget" novalidate (submit)="updateFullBudget(update); update.reset()" >
-            <div class="row">
-                <div class="form-group col-sm-3" hidden>
-                    <input class="form-control input-underline input-lg" type="text" placeholder={{budgetToEdit[0].id}} value={{budgetToEdit[0].id}} hidden name="id" ngModel required >
-                </div>
-                <div class="form-group col-sm-3">
-                    <label>Category to Edit</label>
-                    <input class="form-control input-underline input-lg" type="text" placeholder={{budgetToEdit[0].category}} value={{budgetToEdit[0].category}} disabled name="category" ngModel  >
-                </div>
-                <div class="col-sm-3">
-                    <label>Edit Amount</label>
-                    <input class="form-control input-underline input-lg" type="number" placeholder={{budgetToEdit[0].amount}} minlength="1"  name="amount" ngModel required >
-                </div>
-                <div class="form-group col-sm-3">
-                    <label>Monthly/Yearly</label>
-                    <select class="form-control"   name="monthly"  ngModel required>
-                        <option value="True" >Monthly</option>
-                        <option value="False" >Yearly</option>
-                    </select>
-                </div>
+    <!--<div class="col col-sm-12">-->
 
-                <div class="form-group col-sm-1">
-                    <button class="btn-group-sm" style="margin-top: 35px;" type="submit" >Update</button>
-                </div>
-                <div class="form-group col-sm-1">
-                    <button class="btn-group-sm" style="margin-top: 35px;" type="button" (click)="cancel()" ><i class="fa fa-remove"></i></button>
-                </div>
-            </div>
+        <!--<form #f="ngForm" novalidate (submit)="addBudgets(f); f.reset()" >-->
+    <!--<div class="row">-->
+        <!--<div class="form-group col-sm-3">-->
+            <!--<label>Category</label>-->
+            <!--<select class="form-control"  id="category" name="category" required ngModel>-->
+                <!--<option *ngFor="let category of categories" value={{category.category}} >{{category.category}}</option>-->
+            <!--</select>-->
+        <!--</div>-->
+        <!--<div class="col-sm-3">-->
+            <!--<label>Amount</label>-->
+            <!--<input class="form-control input-underline input-lg" type="number" placeholder="Enter Amount" id="amount" minlength="1"  name="amount" ngModel required >-->
+        <!--</div>-->
+        <!--<div class="form-group col-sm-3">-->
+            <!--<label>Monthly/Yearly</label>-->
+            <!--<select class="form-control"  id="monthly" name="monthly"  ngModel required>-->
+                <!--<option value="True" >Monthly</option>-->
+                <!--<option value="False" >Yearly</option>-->
+            <!--</select>-->
+        <!--</div>-->
 
-        </form>
-    </div>
-    <div class="error" *ngIf="badBudget" style="margin-left: 15px;" >Category already being used for budget!</div>
+        <!--<div class="form-group col-sm-3">-->
+            <!--<button class="btn-group-sm" style="margin-top: 35px;" type="submit" [disabled]="!f.form.valid">Add Budget</button>-->
+        <!--</div>-->
+    <!--</div>-->
+
+        <!--</form>-->
+    <!--</div>-->
+    <!--<div class="error" *ngIf="badBudget" style="margin-left: 15px;" >Category already being used for budget!</div>-->
+
+
+    <!--<div class="col col-sm-12">-->
+        <!--<form #cat="ngForm" novalidate (submit)="addCategory(cat); cat.reset()" >-->
+            <!--<div class="row">-->
+                 <!--<div class="col-sm-3">-->
+                     <!--<label>Add New Category</label>-->
+                <!--<input class="form-control input-underline input-lg" type="text" placeholder="Enter New Category"  minlength="3"  name="category" ngModel required >-->
+                 <!--</div>-->
+                <!--<div class="form-group col-sm-3">-->
+                    <!--<button class="btn-group-lg" style="margin-top: 35px;" type="submit" [disabled]="!cat.form.valid">Add Category</button>-->
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</form>-->
+    <!--</div>-->
+    <!--<div class="error" *ngIf="badCat" style="margin-left: 15px;" >Please enter a NEW category!</div>-->
+
+    <!--<div class="col col-sm-12">-->
+        <!--<form #update="ngForm" *ngIf="editBudget" novalidate (submit)="updateFullBudget(update); update.reset()" >-->
+            <!--<div class="row">-->
+                <!--<div class="form-group col-sm-3" hidden>-->
+                    <!--<input class="form-control input-underline input-lg" type="text" placeholder={{budgetToEdit[0].id}} value={{budgetToEdit[0].id}} hidden name="id" ngModel required >-->
+                <!--</div>-->
+                <!--<div class="form-group col-sm-3">-->
+                    <!--<label>Category to Edit</label>-->
+                    <!--<input class="form-control input-underline input-lg" type="text" placeholder={{budgetToEdit[0].category}} value={{budgetToEdit[0].category}} disabled name="category" ngModel  >-->
+                <!--</div>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<label>Edit Amount</label>-->
+                    <!--<input class="form-control input-underline input-lg" type="number" placeholder={{budgetToEdit[0].amount}} minlength="1"  name="amount" ngModel required >-->
+                <!--</div>-->
+                <!--<div class="form-group col-sm-3">-->
+                    <!--<label>Monthly/Yearly</label>-->
+                    <!--<select class="form-control"   name="monthly"  ngModel required>-->
+                        <!--<option value="True" selected="selected">Monthly</option>-->
+                        <!--<option value="False" >Yearly</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+
+                <!--<div class="form-group col-sm-2">-->
+                    <!--<button class="btn-group-sm" style="margin-top: 35px;" type="submit" >Update Budget</button>-->
+                <!--</div>-->
+                <!--<div class="form-group col-sm-1">-->
+                    <!--<button class="btn-group-sm" style="margin-top: 35px;" type="button" (click)="cancel()" ><i class="fa fa-remove"></i></button>-->
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</form>-->
+    <!--</div>-->
+    <!--<div class="error" *ngIf="badBudget" style="margin-left: 15px;" >Category already being used for budget!</div>-->
 
     <br>
 
@@ -95,9 +163,10 @@
                 <tr>
                     <th hidden="true">Id</th>
                     <th>Category</th>
-                    <th>Amount</th>
-                    <th></th>
-                    <th></th>
+                    <th>Amount(Monthly)</th>
+                    <th><a href="javascript:void(0)"  ngbDropdownToggle (click)="newBudget()">Budget <i class="fa fa-plus"></i></a></th>
+                    <th><a href="javascript:void(0)"  ngbDropdownToggle (click)="newCat()">Category <i class="fa fa-plus"></i></a></th>
+
                 </tr>
                 </thead>
                 <tbody>
