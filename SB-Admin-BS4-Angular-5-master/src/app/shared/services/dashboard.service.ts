@@ -38,7 +38,7 @@ export class DashBoardServices extends BaseService {
         let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'bearer ' + localStorage.getItem('auth_token')});
         let options = new RequestOptions({headers: headers});
 
-        return this.http.get(this.baseUrl + '/transactions/' + localStorage.getItem('id'), options)
+        return this.http.get(this.baseUrl + '/Transactions/GetByUserID/' + localStorage.getItem('id'), options)
             .map(response => response.json())
             .map(response => {
                 return <Transactions[]>response;
@@ -55,7 +55,7 @@ export class DashBoardServices extends BaseService {
         });
         let options = new RequestOptions({headers: headers});
 
-        return this.http.post(this.baseUrl + '/transactions', body, options)
+        return this.http.post(this.baseUrl + '/transactions/create', body, options)
             .map(response => response.json())
             .map(response => {
                 return  <Transactions[]>response;
@@ -70,7 +70,7 @@ export class DashBoardServices extends BaseService {
         });
         const options = new RequestOptions({headers: headers});
 
-        return this.http.delete(this.baseUrl + '/transactions/' + id, options)
+        return this.http.delete(this.baseUrl + '/transactions/delete/' + id, options)
             .map(res => true)
             .catch(this.handleError);
     }
@@ -84,7 +84,7 @@ export class DashBoardServices extends BaseService {
         });
         let options = new RequestOptions({headers: headers});
 
-        return this.http.put(this.baseUrl + '/transactions/' + id, body, options)
+        return this.http.put(this.baseUrl + '/transactions/update/' + id, body, options)
             .map(res => true)
             .catch(this.handleError);
     }

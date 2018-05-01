@@ -8,8 +8,7 @@ import { PageHeaderModule } from '../../shared';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import {BudgetService} from '../../shared/services/budget.service';
 import {FormsModule} from '@angular/forms';
-import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule,
-    MatSortModule, MatTableModule } from '@angular/material';
+import {DashBoardServices} from '../../shared/services/dashboard.service';
 
 
 
@@ -20,10 +19,10 @@ import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule,
         ChartsRoutingModule,
         PageHeaderModule,
         Ng2SmartTableModule,
-        FormsModule,
+        FormsModule
     ],
     declarations: [ChartsComponent],
-    providers: [ BudgetService, CurrencyPipe ]
+    providers: [ BudgetService, CurrencyPipe, DashBoardServices ]
 
 })
 export class ChartsModule {}

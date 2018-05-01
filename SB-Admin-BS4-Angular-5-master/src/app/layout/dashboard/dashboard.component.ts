@@ -80,17 +80,21 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
+       this.getUserTransactions();
+    }
+
+    public getUserTransactions() {
         this.dashBoardServices.getTransactions()
             .subscribe(
                 result => {
                     if (result) {
                         for (let i = 0; i < result.length; i++) {
-                          result[i].transactionDate = this.datePipe.transform(new Date(result[i].transactionDate), 'MM-dd-yyyy');
+                            result[i].transactionDate = this.datePipe.transform(new Date(result[i].transactionDate), 'MM-dd-yyyy');
                             result[i].amount = this.currencyPipe.transform(result[i].amount, 'USD');
 
                         }
                         this.transactions = result;
-                        }
+                    }
                 },
                 error => error.toString());
     }

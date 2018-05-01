@@ -12,6 +12,8 @@ import { BehaviorSubject } from 'rxjs/Rx';
 // Add the RxJS Observable operators we need in this app.
 import '../../rxjs-operators';
 import {User} from '../models/user.model';
+import {Transactions} from '../models/transactions.interface';
+import {Expenditures} from '../models/expenditure.interface';
 
 
 @Injectable()
@@ -126,6 +128,18 @@ export class BudgetService extends BaseService {
 
         return this.http.put(this.baseUrl + '/Budget/UpdateBudget/' + id, body, options)
             .map(res => true)
+            .catch(this.handleError);
+    }
+
+    getExpenditures(): Observable<Expenditures[]> {
+        let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'bearer ' + localStorage.getItem('auth_token')});
+        let options = new RequestOptions({headers: headers});
+
+        return this.http.get(this.baseUrl + '/Transactions/GetAll/' + localStorage.getItem('id'), options)
+            .map(response => response.json())
+            .map(response => {
+                return <Expenditures[]>response;
+            })
             .catch(this.handleError);
     }
 }
