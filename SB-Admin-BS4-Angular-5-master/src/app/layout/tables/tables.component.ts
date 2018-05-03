@@ -79,6 +79,11 @@ export class TablesComponent implements OnInit {
                                     this.transactions.push(result[i]);
                                 }
                             }
+                            if (value.category === '' && value.startDate.toString() !== null && value.endDate.toString() === '') {
+                                if (result[i].transactionDate > value.startDate ) {
+                                    this.transactions.push(result[i]);
+                                }
+                            }
                             if (value.category !== null && value.startDate.toString() === null && value.endDate.toString() === null) {
                                 if ( result[i].category === value.category) {
                                     this.transactions.push(result[i]);
@@ -91,6 +96,7 @@ export class TablesComponent implements OnInit {
 
                             }
                         this.filter = false;
+                        console.log(value);
                     }
                 },
                 error => error.toString());
