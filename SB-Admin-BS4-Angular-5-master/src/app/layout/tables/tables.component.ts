@@ -59,28 +59,28 @@ export class TablesComponent implements OnInit {
                     if (result) {
                         for (let i = 0; i < result.length; i++) {
                             if (value.category !== null && value.startDate.toString() !== null && value.endDate.toString() !== null) {
-                                if (result[i].category === value.category && result[i].transactionDate > value.startDate &&
-                                    result[i].transactionDate < value.endDate) {
+                                if (result[i].category === value.category && result[i].transactionDate >= value.startDate &&
+                                    result[i].transactionDate <= value.endDate) {
                                     this.transactions.push(result[i]);
                                 }
                             }
                             if (value.category !== null && value.startDate.toString() !== null && value.endDate.toString() === '') {
-                                if (result[i].category === value.category && result[i].transactionDate > value.startDate) {
+                                if (result[i].category === value.category && result[i].transactionDate >= value.startDate) {
                                     this.transactions.push(result[i]);
                                 }
                             }
                             if (value.category !== null && value.startDate.toString() === null && value.endDate.toString() !== null) {
-                                if (result[i].category === value.category && result[i].transactionDate < value.endDate) {
+                                if (result[i].category === value.category && result[i].transactionDate <= value.endDate) {
                                     this.transactions.push(result[i]);
                                 }
                             }
                             if (value.category === '' && value.startDate.toString() !== null && value.endDate.toString() !== null) {
-                                if (result[i].transactionDate > value.startDate && result[i].transactionDate < value.endDate) {
+                                if (result[i].transactionDate >= value.startDate && result[i].transactionDate <= value.endDate) {
                                     this.transactions.push(result[i]);
                                 }
                             }
                             if (value.category === '' && value.startDate.toString() !== null && value.endDate.toString() === '') {
-                                if (result[i].transactionDate > value.startDate ) {
+                                if (result[i].transactionDate >= value.startDate ) {
                                     this.transactions.push(result[i]);
                                 }
                             }
@@ -90,7 +90,6 @@ export class TablesComponent implements OnInit {
                                 }
                             }
                         }
-                        // need to add a check to make sure that it wasn't a bad request or nothing in it
                             if (value.category ===  '' && value.startDate.toString() === '' && value.endDate.toString() === '') {
                                 this.transactions = result;
 
