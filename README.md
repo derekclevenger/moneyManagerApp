@@ -11,4 +11,8 @@ switch directories in command line to where the project is located
 
 run 'npm install'
 
+pull the moneyManagerApi(c#) and run it locally as well
+
 run 'ng serve' to run project
+
+Enjoy!
