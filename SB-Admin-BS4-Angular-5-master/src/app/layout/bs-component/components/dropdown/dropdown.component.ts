@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UserRegistration} from '../../../../shared/models/user.registration';
 
 @Component({
   selector: 'app-dropdown',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dropdown.component.scss']
 })
 export class DropdownComponent implements OnInit {
-
+    user: UserRegistration;
   constructor() { }
 
   ngOnInit() {

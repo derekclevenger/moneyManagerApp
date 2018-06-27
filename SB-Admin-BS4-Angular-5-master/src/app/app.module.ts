@@ -5,10 +5,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpModule, XHRBackend } from '@angular/http';
+import { AuthenticateXHRBackend } from './authenticate-xhr.backend';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UserService} from './shared/services/user.service';
+import {BaseAnimationRenderer} from '@angular/platform-browser/animations/src/animation_renderer';
+import {ConfigService} from './shared/utils/config.service';
+import {SignupComponent} from './signup/signup.component';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -23,6 +30,9 @@ export function createTranslateLoader(http: HttpClient) {
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
+        HttpModule,
+        BrowserModule,
+        FormsModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -33,7 +43,10 @@ export function createTranslateLoader(http: HttpClient) {
         AppRoutingModule
     ],
     declarations: [AppComponent],
-    providers: [AuthGuard],
+    providers: [ AuthGuard, ConfigService, {
+        provide: XHRBackend,
+        useClass: AuthenticateXHRBackend
+    }],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

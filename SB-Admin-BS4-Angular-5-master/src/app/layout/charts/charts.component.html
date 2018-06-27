@@ -1,78 +1,137 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'Charts'" [icon]="'fa-bar-chart-o'"></app-page-header>
-    <div class="row">
-        <div class="col col-sm-6">
-            <div class="card mb-3">
-                <div class="card-header">
-                    Bar Chart
-                </div>
-                <div class="card-body">
-                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-                    </canvas>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
-                </div>
-            </div>
+
+    <app-page-header [heading]="'Budgets'" [icon]="'fa-bar-chart-o'"></app-page-header>
+    <div>
+        <form *ngIf="newBudgets" #f="ngForm" novalidate (submit)="addBudgets(f); f.reset()" >
+        <div>
+            <label>Category</label>
+            <select class="form-control"   name="category" required ngModel>
+                <option *ngFor="let category of categories" value={{category.category}} >{{category.category}}</option>
+            </select>
         </div>
-        <div class="col col-sm-6">
-            <div class="card mb-3">
-                <div class="card-header">
-                    Doughnut Chart
-                </div>
-                <div class="card-body">
-                    <canvas baseChart height="180px" [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-                    </canvas>
-                </div>
+            <div class="error" *ngIf="badBudget" style="margin-left: 15px;" >Category already in use! <br></div>
+
+            <div>
+            <label>Amount</label>
+            <input class="form-control input-underline input-lg" type="number" placeholder="Enter Amount"  minlength="1"  name="amount" ngModel required >
+        </div>
+            <div><br>
+            <label>Monthly/Yearly</label>
+            <select class="form-control"   name="monthly"  ngModel required>
+                <option value="True" >Monthly</option>
+                <option value="False" >Yearly</option>
+            </select>
             </div>
+            <button class="btn-group-sm button" style="margin-top: 15px;" type="submit" [disabled]="!f.form.valid">Add Budget</button>
+            <button class="btn-group-sm button" style="margin-top: 5px;" type="button" (click)="cancel()" >Cancel <i class="fa fa-remove"></i></button>
+        </form>
+    </div>
+
+    <div>
+        <form *ngIf="newCats" #cat="ngForm" novalidate (submit)="addCategory(cat); cat.reset()" >
+            <div>
+
+                    <label>Add New Category</label>
+                    <input class="form-control input-underline input-lg" type="text" placeholder="Enter New Category"  minlength="3"  name="category" ngModel required >
+                <div class="error" *ngIf="badCat" style="margin-left: 15px;" >Please enter a NEW category!</div>
+
+                <button class="btn-group-lg button" style="margin-top: 15px;" type="submit" [disabled]="!cat.form.valid">Add Category</button>
+                <button class="btn-group-sm button" style="margin-top: 5px;" type="button" (click)="cancel()" >Cancel <i class="fa fa-remove"></i></button>
+
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <form #update="ngForm"  *ngIf="editBudget" novalidate (submit)="updateFullBudget(update); update.reset()" >
+            <div>
+                <input class="form-control input-underline input-lg" type="text" placeholder={{budgetToEdit[0].id}} value={{budgetToEdit[0].id}} hidden name="id" ngModel required >
+            </div>
+            <div>
+                <label>Category to Edit</label>
+                <input class="form-control input-underline input-lg" type="text" placeholder={{budgetToEdit[0].category}} value={{budgetToEdit[0].category}} disabled name="category" ngModel  >
+            </div>
+            <div>
+                <label>Edit Amount</label>
+                <input class="form-control input-underline input-lg" type="number" placeholder={{budgetToEdit[0].amount}} minlength="1"  name="amount" ngModel required >
+            </div>
+            <div><br>
+                <label>Monthly/Yearly</label>
+                <select class="form-control"   name="monthly"  ngModel required>
+                    <option value="True" >Monthly</option>
+                    <option value="False" >Yearly</option>
+                </select>
+            </div>
+
+            <button class="btn-group-sm button" style="margin-top: 10px;"  type="submit" >Update Budget</button>
+            <button class="btn-group-sm button" style="margin-top: 5px;" type="button" (click)="cancel()" >Cancel <i class="fa fa-remove"></i></button>
+        </form>
+    </div>
+
+    <br>
+
+
+
+
+    <div class="card mb-3" *ngIf="seeBudgets">
+        <div class="card-header" >Budgets
+        <button class="pull-right" style="width:200px; height: 40px; background-color: darkgray;" (click)="switchView()">View Expenditures</button>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th hidden="true">Id</th>
+                    <th>Category</th>
+                    <th>Amount(Yearly)</th>
+                    <th><a href="javascript:void(0)"  ngbDropdownToggle (click)="newBudget()">Budget <i class="fa fa-plus"></i></a></th>
+                    <th><a href="javascript:void(0)"  ngbDropdownToggle (click)="newCat()">Category <i class="fa fa-plus"></i></a></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr  *ngFor="let budgets of budget">
+                    <td hidden="true">{{budgets.id}}</td>
+                    <td>{{budgets.category}}</td>
+                    <td *ngIf="budgets.monthly">{{budgets.amount * 12 | currency: 'USD'}}</td>
+                    <td *ngIf="!budgets.monthly">{{budgets.amount | currency: 'USD'}}</td>
+                    <td><a href="javascript:void(0)"  ngbDropdownToggle (click)="updateBudget(budgets.id)">Edit <i class="fa fa-pencil-square"></i> </a></td>
+                    <td><a href="javascript:void(0)"  (click)="deleteBudget(budgets.id)">Delete <i class="fa fa-trash-o"></i></a></td>
+                </tr>
+
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col col-sm-6">
-            <div class="card mb-3">
-                <div class="card-header">
-                    Radar Chart
-                </div>
-                <div class="card-body">
-                    <canvas baseChart height="150px" [datasets]="radarChartData" [labels]="radarChartLabels" [chartType]="radarChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-                    </canvas>
-                </div>
-            </div>
+
+    <div class="card mb-3" *ngIf="!seeBudgets">
+        <div class="card-header" >Expenditures
+            <button class="pull-right" style="width:200px; height: 40px; background-color: darkgray;" type="button" (click)="switchView()">View Budgets</button>
         </div>
-        <div class="col col-sm-6">
-            <div class="card mb-3">
-                <div class="card-header">
-                    Pie Chart
-                </div>
-                <div class="card-body">
-                    <canvas baseChart height="150px" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-                    </canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col col-sm-6">
-            <div class="card mb-3">
-                <div class="card-header">
-                    Polar Area Chart
-                </div>
-                <div class="card-body">
-                    <canvas baseChart height="130px" [data]="polarAreaChartData" [labels]="polarAreaChartLabels" [legend]="polarAreaLegend" [chartType]="polarAreaChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-                    </canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col col-sm-6">
-            <div class="card mb-3">
-                <div class="card-header">
-                    Line Chart
-                </div>
-                <div class="card-body">
-                    <canvas baseChart height="130" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-                    </canvas>
-                </div>
-            </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-hover table-striped">
+                <thead *ngIf="expenditures">
+                <tr>
+                    <th>Category</th>
+                    <th>Budgeted Yearly</th>
+                    <th>Spent (YTD) </th>
+                    <th>Amount Left (YTD)</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr  *ngFor="let expenditure of expenditures" >
+                    <td>{{expenditure.category}}</td>
+                    <td>{{expenditure.budgetedAmount | currency: 'USD'}}</td>
+                    <td>{{expenditure.spentAmount | currency: 'USD'}}</td>
+                    <td >{{expenditure.totalAmount | currency: 'USD'}}</td>
+                </tr>
+
+                </tbody>
+            </table>
         </div>
     </div>
+
 </div>

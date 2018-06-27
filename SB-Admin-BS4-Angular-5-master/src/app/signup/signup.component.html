@@ -1,27 +1,36 @@
 <div class="login-page" [@routerTransition]>
+
     <div class="row justify-content-md-center">
         <div class="col-md-4">
             <img class="user-avatar" src="assets/images/logo.png" width="150px" />
             <h1 class="jumbotron">My Money Manager Application</h1>
-            <form role="form">
+            <form #f="ngForm" novalidate  (ngSubmit)="registerUser(f)">
                 <div class="form-content">
                     <div class="form-group">
-                        <input type="text" class="form-control input-underline input-lg" id="" placeholder="Full Name">
+                        <input type="text" class="form-control input-underline input-lg" id="firstName" minlength="3" placeholder="First name" name="firstName" ngModel required validator="name" >
                     </div>
 
                     <div class="form-group">
-                        <input type="text" class="form-control input-underline input-lg" id="" placeholder="Email">
+                        <input type="text" class="form-control input-underline input-lg" id="lastName" minlength="3" placeholder="Last name" name="lastName" ngModel required>
+                    </div>
+                    <div class="form-group">
+                        <input id="email" type="text" #email="ngModel" required name="email" class="form-control input-underline input-lg" placeholder="Email" ngModel required validateEmail >
+                        <small [hidden]="email.valid || (email.pristine && !submitted)" class="text-danger">Please enter a valid email</small>
+
                     </div>
 
                     <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="Password">
+                        <input type="password" class="form-control input-underline input-lg" id="password" minlength="8" name="password" placeholder="Password" ngModel required>
                     </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="Repeat Password">
-                    </div>
+
                 </div>
-                <a class="btn rounded-btn" [routerLink]="['/dashboard']"> Register </a>&nbsp;
-                <a class="btn rounded-btn" [routerLink]="['/login']"> Log in </a>
+
+                    <button type="submit" class="btn rounded-btn" [disabled]="f.invalid || isRequesting">Sign Up</button>
+                    <a class="btn rounded-btn" [routerLink]="['/login']"> Log in </a>
+                    <div *ngIf="errors" class="alert alert-danger" role="alert">
+                    <app-spinner [isRunning]="isRequesting"></app-spinner>
+                    <strong>Oops!</strong> {{errors}}
+                </div>
             </form>
         </div>
     </div>
